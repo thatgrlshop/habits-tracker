@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habits Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .date-input {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="date"], button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 5px;
+    }
+
+    .tracker {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .habit {
+      margin: 15px 0;
+    }
+
+    label {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    #save-message {
+      color: #4caf50;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Habits Tracker ✨</h1>
+
+  <div class="date-input">
+    <input type="date" id="tracker-date">
+    <button id="load-button">Load Habits</button>
+  </div>
+
+  <div class="tracker" id="tracker" style="display: none;">
+    <h2 id="selected-date"></h2>
+
+    <div class="habit">
+      <label><input type="checkbox" id="water-intake"> Drink 2L of water</label>
+    </div>
+    <div class="habit">
+      <label><input type="checkbox" id="workout"> Do a workout</label>
+    </div>
+    <div class="habit">
+      <label><input type="checkbox" id="sleep"> Sleep 8 hours</label>
+    </div>
+    <div class="habit">
+      <label><input type="checkbox" id="read"> Read for 30 minutes</label>
+    </div>
+
+    <button id="save-button">Save Habits</button>
+    <p id="save-message">Habits saved! ✅</p>
+  </div>
+
+  <script>
+    const tracker = document.getElementById('tracker');
+    const selectedDate = document.getElementById('selected-date');
+    const saveMessage = document.getElementById('save-message');
+    const trackerDate = document.getElementById('tracker-date');
+    const loadButton = document.getElementById('load-button');
+    const saveButton = document.getElementById('save-button');
+
+    // Function to load habits for a specific date
+    function loadHabits(date) {
+      const savedData = JSON.parse(localStorage.getItem(date)) || {};
+      document.getElementById('water-intake').checked = savedData.waterIntake || false;
+      document.getElementById('workout').checked = savedData.workout || false;
+      document.getElementById('sleep').checked = savedData.sleep || false;
+      document.getElementById('read').checked = savedData.read || false;
+    }
+
+    // Save habits for a specific date
+    function saveHabits(date) {
+      const habitsData = {
+        waterIntake: document.getElementById('water-intake').checked,
+        workout: document.getElementById('workout').checked,
+        sleep: document.getElementById('sleep').checked,
+        read: document.getElementById('read').checked,
+      };
+
+      localStorage.setItem(date, JSON.stringify(habitsData));
+      saveMessage.style.display = 'block';
+      setTimeout(() => saveMessage.style.display = 'none', 2000);
+    }
+
+    // Event listener for "Load Habits" button
+    loadButton.addEventListener('click', () => {
+      const date = trackerDate.value;
+      if (!date) {
+        alert('Please select a date!');
+        return;
+      }
+
+      tracker.style.display = 'block';
+      selectedDate.innerText = `Habits for ${date}`;
+      loadHabits(date);
+    });
+
+    // Event listener for "Save Habits" button
+    saveButton.addEventListener('click', () => {
+      const date = trackerDate.value;
+      if (!date) {
+        alert('Please select a date before saving!');
+        return;
+      }
+
+      saveHabits(date);
+    });
+  </script>
+
+</body>
+</html>
