@@ -91,6 +91,25 @@
     button:hover {
       background-color: #8c6375;
     }
+    .water-drops {
+  display: flex;
+  gap: 8px; /* Spaziatura tra le gocce */
+  margin-left: 10px; /* Distanza dal testo */
+}
+
+.water-drops input[type="checkbox"] {
+  width: 20px; /* Dimensione della goccia */
+  height: 20px;
+  appearance: none; /* Rimuove il default del browser */
+  background-color: #fff; /* Sfondo */
+  border: 2px solid #A17E89; /* Colore bordo */
+  border-radius: 50%; /* Forma rotonda */
+  cursor: pointer;
+}
+
+.water-drops input[type="checkbox"]:checked {
+  background-color: #A17E89; /* Colore quando selezionato */
+}
   </style>
 </head>
 <body>
@@ -104,9 +123,15 @@
   <div class="habits" id="habits">
     <h2 id="selected-date"></h2>
     <div class="habit-item">
-      <label>Water Intake:</label>
-      <input type="checkbox" id="water-intake">
-    </div>
+  <label>Water Intake:</label>
+  <div class="water-drops">
+    <input type="checkbox" id="water-drop-1">
+    <input type="checkbox" id="water-drop-2">
+    <input type="checkbox" id="water-drop-3">
+    <input type="checkbox" id="water-drop-4">
+    <input type="checkbox" id="water-drop-5">
+  </div>
+</div>
     <div class="habit-item">
       <label>Workout:</label>
       <input type="checkbox" id="workout">
