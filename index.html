@@ -91,24 +91,48 @@
     button:hover {
       background-color: #8c6375;
     }
-    .water-drops {
+    
+.water-drops {
   display: flex;
   gap: 8px; /* Spaziatura tra le gocce */
   margin-left: 10px; /* Distanza dal testo */
 }
 
 .water-drops input[type="checkbox"] {
-  width: 16px; /* Dimensione della goccia */
-  height: 16px;
+  width: 20px;
+  height: 30px;
   appearance: none; /* Rimuove il default del browser */
   background-color: #fff; /* Sfondo */
   border: 2px solid #A17E89; /* Colore bordo */
-  border-radius: 50%; /* Forma rotonda */
+  border-radius: 50% 50% 50% 50% / 60% 60% 100% 100%; /* Forma di goccia */
   cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.water-drops input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.3s;
 }
 
 .water-drops input[type="checkbox"]:checked {
   background-color: #A17E89; /* Colore quando selezionato */
+}
+
+.water-drops input[type="checkbox"]:checked::after {
+  background-color: white; /* Puntino interno quando selezionato */
+}
+
+.water-drops input[type="checkbox"]:hover {
+  transform: scale(1.1); /* Effetto hover */
 }
   </style>
 </head>
