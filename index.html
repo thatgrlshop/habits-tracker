@@ -93,25 +93,8 @@
     }
     
 .water-drops input[type="checkbox"] {
-  width: 25px; /* Larghezza goccia */
-  height: 35px; /* Altezza goccia */
-  appearance: none; /* Rimuove stile predefinito */
-  background-color: #fff; /* Sfondo bianco */
-  border: 2px solid #A17E89; /* Bordo come gli altri */
   border-radius: 50%; /* Per evitare spigoli nel contorno */
   clip-path: polygon(50% 0%, 90% 30%, 100% 80%, 50% 100%, 0% 80%, 10% 30%); /* Forma a goccia */
-  cursor: pointer;
-  position: relative;
-  transition: background-color 0.3s, transform 0.2s; /* Effetti di transizione */
-}
-
-.water-drops input[type="checkbox"]:checked {
-  background-color: #A17E89; /* Colore quando selezionata */
-  border-color: #A17E89; /* Mantieni coerente il bordo */
-}
-
-.water-drops input[type="checkbox"]:hover {
-  transform: scale(1.1); /* Ingrandimento al passaggio del mouse */
 }
   </style>
 </head>
