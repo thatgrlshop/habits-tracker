@@ -178,30 +178,44 @@
     }
 
     // Salva le abitudini
-    document.getElementById("save-habits").addEventListener("click", () => {
-      const day = selectedDateElement.textContent;
-      const waterIntake = document.getElementById("water-intake").checked;
-      const workout = document.getElementById("workout").checked;
-      const readPages = document.getElementById("read-pages").checked;
+document.getElementById("save-habits").addEventListener("click", () => {
+  const day = selectedDateElement.textContent;
 
-      const habitsData = { waterIntake, workout, readPages };
-      localStorage.setItem(`habits-${day}`, JSON.stringify(habitsData));
-      alert("Habits saved! ✨");
-    });
+  // Ottieni lo stato di ciascuna checkbox per water-intake
+  const waterDrops = Array.from(document.querySelectorAll(".water-drops input[type='checkbox']"))
+    .map((checkbox) => checkbox.checked);
+
+  const workout = document.getElementById("workout").checked;
+  const readPages = document.getElementById("read-pages").checked;
+
+  const habitsData = { waterDrops, workout, readPages };
+  localStorage.setItem(`habits-${day}`, JSON.stringify(habitsData));
+  alert("Habits saved! ✨");
+});
 
     // Carica le abitudini salvate
-    function loadHabits(date) {
-      const savedHabits = JSON.parse(localStorage.getItem(`habits-${date}`));
-      if (savedHabits) {
-        document.getElementById("water-intake").checked = savedHabits.waterIntake;
-        document.getElementById("workout").checked = savedHabits.workout;
-        document.getElementById("read-pages").checked = savedHabits.readPages;
-      } else {
-        document.getElementById("water-intake").checked = false;
-        document.getElementById("workout").checked = false;
-        document.getElementById("read-pages").checked = false;
+function loadHabits(date) {
+  const savedHabits = JSON.parse(localStorage.getItem(`habits-${date}`));
+  if (savedHabits) {
+    // Carica lo stato delle checkbox per water-intake
+    const waterDrops = document.querySelectorAll(".water-drops input[type='checkbox']");
+    savedHabits.waterDrops.forEach((checked, index) => {
+      if (waterDrops[index]) {
+        waterDrops[index].checked = checked;
       }
-    }
+    });
+
+    document.getElementById("workout").checked = savedHabits.workout;
+    document.getElementById("read-pages").checked = savedHabits.readPages;
+  } else {
+    // Resetta le checkbox per un nuovo giorno
+    document.querySelectorAll(".water-drops input[type='checkbox']").forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+    document.getElementById("workout").checked = false;
+    document.getElementById("read-pages").checked = false;
+  }
+}
 
     // Cambia mese
     prevMonthButton.addEventListener("click", () => {
