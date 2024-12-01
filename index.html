@@ -92,47 +92,26 @@
       background-color: #8c6375;
     }
     
-.water-drops {
-  display: flex;
-  gap: 8px; /* Spaziatura tra le gocce */
-  margin-left: 10px; /* Distanza dal testo */
-}
-
 .water-drops input[type="checkbox"] {
-  width: 20px;
-  height: 30px;
-  appearance: none; /* Rimuove il default del browser */
-  background-color: #fff; /* Sfondo */
-  border: 2px solid #A17E89; /* Colore bordo */
-  border-radius: 50% 50% 50% 50% / 60% 60% 100% 100%; /* Forma di goccia */
+  width: 25px; /* Larghezza goccia */
+  height: 35px; /* Altezza goccia */
+  appearance: none; /* Rimuove stile predefinito */
+  background-color: #fff; /* Sfondo bianco */
+  border: 2px solid #A17E89; /* Bordo come gli altri */
+  border-radius: 50%; /* Per evitare spigoli nel contorno */
+  clip-path: polygon(50% 0%, 90% 30%, 100% 80%, 50% 100%, 0% 80%, 10% 30%); /* Forma a goccia */
   cursor: pointer;
   position: relative;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.water-drops input[type="checkbox"]::after {
-  content: '';
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background-color: transparent;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s; /* Effetti di transizione */
 }
 
 .water-drops input[type="checkbox"]:checked {
-  background-color: #A17E89; /* Colore quando selezionato */
-}
-
-.water-drops input[type="checkbox"]:checked::after {
-  background-color: white; /* Puntino interno quando selezionato */
+  background-color: #A17E89; /* Colore quando selezionata */
+  border-color: #A17E89; /* Mantieni coerente il bordo */
 }
 
 .water-drops input[type="checkbox"]:hover {
-  transform: scale(1.1); /* Effetto hover */
+  transform: scale(1.1); /* Ingrandimento al passaggio del mouse */
 }
   </style>
 </head>
