@@ -15,16 +15,37 @@
     h1 {
       text-align: center;
     }
-    .calendar {
+    .calendar-header {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .calendar-header button {
+      padding: 5px 10px;
+      background-color: #A17E89;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .calendar-header button:hover {
+      background-color: #8c6375;
+    }
+    .calendar-header span {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      justify-items: center;
       margin-bottom: 20px;
     }
     .day {
       width: 40px;
       height: 40px;
-      margin: 5px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -68,6 +89,11 @@
 </head>
 <body>
   <h1>Habit Tracker</h1>
+  <div class="calendar-header">
+    <button id="prev-month">❮</button>
+    <span id="current-month"></span>
+    <button id="next-month">❯</button>
+  </div>
   <div class="calendar" id="calendar"></div>
   <div class="habits" id="habits">
     <h2 id="selected-date"></h2>
@@ -90,14 +116,36 @@
     const calendar = document.getElementById("calendar");
     const habits = document.getElementById("habits");
     const selectedDateElement = document.getElementById("selected-date");
+    const currentMonthElement = document.getElementById("current-month");
+    const prevMonthButton = document.getElementById("prev-month");
+    const nextMonthButton = document.getElementById("next-month");
 
-    // Genera il calendario con i giorni
+    let currentDate = new Date();
+
+    // Funzione per generare il calendario
     function generateCalendar() {
-      for (let i = 1; i <= 31; i++) {
+      calendar.innerHTML = "";
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const firstDayIndex = new Date(year, month, 1).getDay();
+
+      currentMonthElement.textContent = `${currentDate.toLocaleString("default", {
+        month: "long",
+      })} ${year}`;
+
+      // Aggiungi spazi vuoti prima del primo giorno del mese
+      for (let i = 0; i < firstDayIndex; i++) {
+        const emptyDiv = document.createElement("div");
+        calendar.appendChild(emptyDiv);
+      }
+
+      // Aggiungi i giorni del mese
+      for (let day = 1; day <= daysInMonth; day++) {
         const dayElement = document.createElement("div");
         dayElement.classList.add("day");
-        dayElement.textContent = i;
-        dayElement.addEventListener("click", () => selectDay(i));
+        dayElement.textContent = day;
+        dayElement.addEventListener("click", () => selectDay(day));
         calendar.appendChild(dayElement);
       }
     }
@@ -106,19 +154,21 @@
     function selectDay(day) {
       const allDays = document.querySelectorAll(".day");
       allDays.forEach((d) => d.classList.remove("active"));
-      const selectedDay = allDays[day - 1];
+      const selectedDay = [...allDays].find((d) => d.textContent == day);
       selectedDay.classList.add("active");
 
-      const date = `Day ${day}`;
+      const date = `${day} ${currentDate.toLocaleString("default", {
+        month: "long",
+      })} ${currentDate.getFullYear()}`;
       selectedDateElement.textContent = date;
       habits.style.display = "block";
 
-      loadHabits(day); // Carica le abitudini salvate per il giorno
+      loadHabits(date); // Carica le abitudini salvate per la data
     }
 
     // Salva le abitudini
     document.getElementById("save-habits").addEventListener("click", () => {
-      const day = document.querySelector(".day.active").textContent;
+      const day = selectedDateElement.textContent;
       const waterIntake = document.getElementById("water-intake").checked;
       const workout = document.getElementById("workout").checked;
       const readPages = document.getElementById("read-pages").checked;
@@ -129,8 +179,8 @@
     });
 
     // Carica le abitudini salvate
-    function loadHabits(day) {
-      const savedHabits = JSON.parse(localStorage.getItem(`habits-${day}`));
+    function loadHabits(date) {
+      const savedHabits = JSON.parse(localStorage.getItem(`habits-${date}`));
       if (savedHabits) {
         document.getElementById("water-intake").checked = savedHabits.waterIntake;
         document.getElementById("workout").checked = savedHabits.workout;
@@ -141,6 +191,17 @@
         document.getElementById("read-pages").checked = false;
       }
     }
+
+    // Cambia mese
+    prevMonthButton.addEventListener("click", () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      generateCalendar();
+    });
+
+    nextMonthButton.addEventListener("click", () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      generateCalendar();
+    });
 
     // Genera il calendario all'avvio
     generateCalendar();
