@@ -12,21 +12,23 @@
       background-color: #f9f9f9;
       color: #333;
     }
-    h2 {
+
+    h1 {
       text-align: center;
     }
+
     .calendar-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
     }
-    #selected-date {
-  font-size: 14px; /* Cambia la grandezza del testo */
-  font-weight: light; /* Rendi il testo più leggero */
-  margin-bottom: 10px; /* Spaziatura sotto il titolo */
-  text-align: right; /* Allinea il testo al centro */
-}
+
+    #current-month {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
     .calendar-header button {
       padding: 5px 10px;
       background-color: #A17E89;
@@ -35,20 +37,19 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
     .calendar-header button:hover {
       background-color: #8c6375;
     }
-    .calendar-header span {
-      font-size: 18px;
-      font-weight: bold;
-    }
+
     .calendar {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
+      gap: 5px;
       justify-items: center;
       margin-bottom: 20px;
     }
+
     .day {
       width: 40px;
       height: 40px;
@@ -60,14 +61,17 @@
       cursor: pointer;
       background-color: #fff;
     }
+
     .day:hover {
       background-color: #A17E89;
       color: white;
     }
+
     .day.active {
       background-color: #A17E89;
       color: white;
     }
+
     .habits {
       display: none;
       margin-top: 20px;
@@ -76,9 +80,17 @@
       border-radius: 5px;
       background-color: #fff;
     }
-    .habit-item {
-      margin-bottom: 10px;
+
+    .habit-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Due colonne per rendere le opzioni compatte */
+      gap: 10px;
     }
+
+    .habit-options label {
+      font-size: 14px;
+    }
+
     button {
       margin-top: 10px;
       padding: 10px 20px;
@@ -88,44 +100,45 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #8c6375;
     }
-    .water-drops {
-  display: inline-flex; /* Posiziona gli elementi in linea */
-  gap: 10px; /* Spaziatura tra le checkbox */
-  margin-left: 10px; /* Distanza dalla scritta "Water Intake:" */
-  align-items: center; /* Allinea verticalmente */
-}
-   }
   </style>
 </head>
 <body>
   <h1>Habit Tracker</h1>
+
   <div class="calendar-header">
     <button id="prev-month">❮</button>
     <span id="current-month"></span>
     <button id="next-month">❯</button>
   </div>
+
   <div class="calendar" id="calendar"></div>
+
   <div class="habits" id="habits">
     <h2 id="selected-date"></h2>
-    <div class="habit-item">
-  <label>Water Intake:</label>
-  <div class="water-drops">
-    <input type="checkbox" id="water-drop-1">
-    <input type="checkbox" id="water-drop-2">
-    <input type="checkbox" id="water-drop-3">
-    <input type="checkbox" id="water-drop-4">
-  </div>
-</div>
-    <div class="habit-item">
-      <label>Workout:</label>
-      <input type="checkbox" id="workout">
-    </div>
-    <div class="habit-item">
-      <label>Read 10 pages:</label>
-      <input type="checkbox" id="read-pages">
+    <div class="habit-options">
+      <label><input type="checkbox" class="habit-option" value="Water Intake"> Water Intake</label>
+      <label><input type="checkbox" class="habit-option" value="Workout"> Workout</label>
+      <label><input type="checkbox" class="habit-option" value="Stretching"> Stretching</label>
+      <label><input type="checkbox" class="habit-option" value="Posture Exercises"> Posture Exercises</label>
+      <label><input type="checkbox" class="habit-option" value="Daily Walk"> Daily Walk</label>
+      <label><input type="checkbox" class="habit-option" value="Sleep 7+ Hours"> Sleep 7+ Hours</label>
+      <label><input type="checkbox" class="habit-option" value="Healthy Diet"> Healthy Diet</label>
+      <label><input type="checkbox" class="habit-option" value="3+ Fruits"> 3+ Fruits</label>
+      <label><input type="checkbox" class="habit-option" value="No Sugar"> No Sugar</label>
+      <label><input type="checkbox" class="habit-option" value="Skincare"> Skincare</label>
+      <label><input type="checkbox" class="habit-option" value="Hair Care"> Hair Care</label>
+      <label><input type="checkbox" class="habit-option" value="Oral Care"> Oral Care</label>
+      <label><input type="checkbox" class="habit-option" value="Gratitude"> Gratitude</label>
+      <label><input type="checkbox" class="habit-option" value="Journaling"> Journaling</label>
+      <label><input type="checkbox" class="habit-option" value="Reading"> Reading</label>
+      <label><input type="checkbox" class="habit-option" value="My Dream Project"> My Dream Project</label>
+      <label><input type="checkbox" class="habit-option" value="Clean/Declutter"> Clean/Declutter</label>
+      <label><input type="checkbox" class="habit-option" value="Be Kind"> Be Kind</label>
+      <label><input type="checkbox" class="habit-option" value="Family Time"> Family Time</label>
     </div>
     <button id="save-habits">Save Habits</button>
   </div>
@@ -140,7 +153,6 @@
 
     let currentDate = new Date();
 
-    // Funzione per generare il calendario
     function generateCalendar() {
       calendar.innerHTML = "";
       const year = currentDate.getFullYear();
@@ -148,17 +160,13 @@
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       const firstDayIndex = new Date(year, month, 1).getDay();
 
-      currentMonthElement.textContent = `${currentDate.toLocaleString("default", {
-        month: "long",
-      })} ${year}`;
+      currentMonthElement.textContent = `${currentDate.toLocaleString("default", { month: "long" })} ${year}`;
 
-      // Aggiungi spazi vuoti prima del primo giorno del mese
       for (let i = 0; i < firstDayIndex; i++) {
         const emptyDiv = document.createElement("div");
         calendar.appendChild(emptyDiv);
       }
 
-      // Aggiungi i giorni del mese
       for (let day = 1; day <= daysInMonth; day++) {
         const dayElement = document.createElement("div");
         dayElement.classList.add("day");
@@ -168,63 +176,38 @@
       }
     }
 
-    // Quando si clicca su un giorno, mostra le abitudini
     function selectDay(day) {
       const allDays = document.querySelectorAll(".day");
       allDays.forEach((d) => d.classList.remove("active"));
       const selectedDay = [...allDays].find((d) => d.textContent == day);
       selectedDay.classList.add("active");
 
-      const date = `${day} ${currentDate.toLocaleString("default", {
-        month: "long",
-      })} ${currentDate.getFullYear()}`;
+      const date = `${day} ${currentDate.toLocaleString("default", { month: "long" })} ${currentDate.getFullYear()}`;
       selectedDateElement.textContent = date;
       habits.style.display = "block";
 
-      loadHabits(date); // Carica le abitudini salvate per la data
+      loadHabits(date);
     }
 
-    // Salva le abitudini
-document.getElementById("save-habits").addEventListener("click", () => {
-  const day = selectedDateElement.textContent;
-
-  // Ottieni lo stato di ciascuna checkbox per water-intake
-  const waterDrops = Array.from(document.querySelectorAll(".water-drops input[type='checkbox']"))
-    .map((checkbox) => checkbox.checked);
-
-  const workout = document.getElementById("workout").checked;
-  const readPages = document.getElementById("read-pages").checked;
-
-  const habitsData = { waterDrops, workout, readPages };
-  localStorage.setItem(`habits-${day}`, JSON.stringify(habitsData));
-  alert("Habits saved! ✨");
-});
-
-    // Carica le abitudini salvate
-function loadHabits(date) {
-  const savedHabits = JSON.parse(localStorage.getItem(`habits-${date}`));
-  if (savedHabits) {
-    // Carica lo stato delle checkbox per water-intake
-    const waterDrops = document.querySelectorAll(".water-drops input[type='checkbox']");
-    savedHabits.waterDrops.forEach((checked, index) => {
-      if (waterDrops[index]) {
-        waterDrops[index].checked = checked;
-      }
+    document.getElementById("save-habits").addEventListener("click", () => {
+      const day = selectedDateElement.textContent;
+      const habitOptions = document.querySelectorAll(".habit-option");
+      const habitsData = Array.from(habitOptions).map((checkbox) => ({
+        habit: checkbox.value,
+        checked: checkbox.checked,
+      }));
+      localStorage.setItem(`habits-${day}`, JSON.stringify(habitsData));
+      alert("Habits saved! ✨");
     });
 
-    document.getElementById("workout").checked = savedHabits.workout;
-    document.getElementById("read-pages").checked = savedHabits.readPages;
-  } else {
-    // Resetta le checkbox per un nuovo giorno
-    document.querySelectorAll(".water-drops input[type='checkbox']").forEach((checkbox) => {
-      checkbox.checked = false;
-    });
-    document.getElementById("workout").checked = false;
-    document.getElementById("read-pages").checked = false;
-  }
-}
+    function loadHabits(date) {
+      const savedHabits = JSON.parse(localStorage.getItem(`habits-${date}`)) || [];
+      document.querySelectorAll(".habit-option").forEach((checkbox) => {
+        const habitData = savedHabits.find((habit) => habit.habit === checkbox.value);
+        checkbox.checked = habitData ? habitData.checked : false;
+      });
+    }
 
-    // Cambia mese
     prevMonthButton.addEventListener("click", () => {
       currentDate.setMonth(currentDate.getMonth() - 1);
       generateCalendar();
@@ -235,7 +218,6 @@ function loadHabits(date) {
       generateCalendar();
     });
 
-    // Genera il calendario all'avvio
     generateCalendar();
   </script>
 </body>
